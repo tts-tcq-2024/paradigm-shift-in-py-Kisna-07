@@ -18,9 +18,9 @@ def charge_rate_in_range(charge_rate):
     return True
 
 def battery_is_ok(temperature, soc, charge_rate):
-    return (is_temperature_in_range(temperature) and
-            is_soc_in_range(soc) and
-            is_charge_rate_in_range(charge_rate))
+    return (temperature_in_range(temperature) and
+            soc_in_range(soc) and
+            charge_rate_in_range(charge_rate))
 
 
 
