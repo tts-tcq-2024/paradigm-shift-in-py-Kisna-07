@@ -4,20 +4,26 @@ def print_error(parameter):
 def print_warning(parameter, warning_type):
     print(f'Warning: {parameter} - {warning_type}')
 
+def check_limit(value, lower_limit, upper_limit):
+    return lower_limit <= value <= upper_limit
+
+def check_warning(value, lower_limit, upper_limit, tolerance, parameter):
+    if value <= lower_limit + tolerance:
+        print_warning(parameter, 'Approaching discharge')
+    elif value >= upper_limit - tolerance:
+        print_warning(parameter, 'Approaching charge-peak')
+
 def temperature_in_range(temperature, warning=True):
     upper_limit = 45
     lower_limit = 0
     tolerance = 0.05 * upper_limit
     
-    if temperature < lower_limit or temperature > upper_limit:
+    if not check_limit(temperature, lower_limit, upper_limit):
         print_error('Temperature')
         return False
     
     if warning:
-        if temperature <= lower_limit + tolerance:
-            print_warning('Temperature', 'Approaching discharge')
-        elif temperature >= upper_limit - tolerance:
-            print_warning('Temperature', 'Approaching charge-peak')
+        check_warning(temperature, lower_limit, upper_limit, tolerance, 'Temperature')
     
     return True
 
@@ -26,15 +32,12 @@ def soc_in_range(soc, warning=True):
     lower_limit = 20
     tolerance = 0.05 * upper_limit
     
-    if soc < lower_limit or soc > upper_limit:
+    if not check_limit(soc, lower_limit, upper_limit):
         print_error('State of Charge')
         return False
     
     if warning:
-        if soc <= lower_limit + tolerance:
-            print_warning('State of Charge', 'Approaching discharge')
-        elif soc >= upper_limit - tolerance:
-            print_warning('State of Charge', 'Approaching charge-peak')
+        check_warning(soc, lower_limit, upper_limit, tolerance, 'State of Charge')
     
     return True
 
@@ -42,13 +45,12 @@ def charge_rate_in_range(charge_rate, warning=True):
     upper_limit = 0.8
     tolerance = 0.05 * upper_limit
     
-    if charge_rate > upper_limit:
+    if not check_limit(charge_rate, 0, upper_limit):
         print_error('Charge rate')
         return False
     
-    if warning:
-        if charge_rate >= upper_limit - tolerance:
-            print_warning('Charge rate', 'Approaching charge-peak')
+    if warning and charge_rate >= upper_limit - tolerance:
+        print_warning('Charge rate', 'Approaching charge-peak')
     
     return True
 
