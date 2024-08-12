@@ -7,11 +7,11 @@ def print_warning(parameter, warning_type):
 def check_limit(value, lower_limit, upper_limit):
     return lower_limit <= value <= upper_limit
 
-def check_warning(value, lower_limit, upper_limit, tolerance, parameter):
+def check_warning(value, lower_limit, upper_limit, tolerance, parameter, warning_type_discharge='Approaching discharge', warning_type_peak='Approaching charge-peak'):
     if value <= lower_limit + tolerance:
-        print_warning(parameter, 'Approaching discharge')
+        print_warning(parameter, warning_type_discharge)
     elif value >= upper_limit - tolerance:
-        print_warning(parameter, 'Approaching charge-peak')
+        print_warning(parameter, warning_type_peak)
 
 def temperature_in_range(temperature, warning=True):
     upper_limit = 45
@@ -49,8 +49,8 @@ def charge_rate_in_range(charge_rate, warning=True):
         print_error('Charge rate')
         return False
     
-    if warning and charge_rate >= upper_limit - tolerance:
-        print_warning('Charge rate', 'Approaching charge-peak')
+    if warning:
+        check_warning(charge_rate, 0, upper_limit, tolerance, 'Charge rate', warning_type_discharge='', warning_type_peak='Approaching charge-peak')
     
     return True
 
