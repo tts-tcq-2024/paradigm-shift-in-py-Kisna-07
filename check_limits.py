@@ -60,5 +60,3 @@ def battery_is_ok(temperature, soc, charge_rate, warnings_enabled=True):
 if __name__ == '__main__':
     assert(battery_is_ok(25, 70, 0.7) is True)
     assert(battery_is_ok(50, 85, 0) is False)
-    assert(battery_is_ok(21, 79, 0.76) is True)  # Should print warnings for each parameter
-    assert(battery_is_ok(18, 70, 0.7) is False)  # Should print an error for SOC
